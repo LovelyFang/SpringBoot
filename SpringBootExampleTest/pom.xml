@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.tsxy</groupId>
-    <artifactId>saoFang</artifactId>
+    <artifactId>SpringBootExampleTest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SpringBootExampleTest</name>
     <description>SpringBootExampleTest</description>
