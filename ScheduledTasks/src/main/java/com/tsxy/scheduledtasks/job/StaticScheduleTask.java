@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @EnableScheduling
 public class StaticScheduleTask {
 
-    @Scheduled(cron = "0/5 * * * * ?")
+//    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0 0/4 * * * ?")
     public void configurationTasks(){
         System.out.println("执行定时任务,基于注解的：" + LocalDateTime.now());
     }
