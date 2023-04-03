@@ -75,6 +75,12 @@ public class demo {
         return content;
     }
 
+    @Test
+    public void testNanoTime(){
+        System.out.println(System.nanoTime());
+        System.out.println(System.currentTimeMillis());
+        System.out.println(Runtime.getRuntime().availableProcessors());
+    }
 
 
 
