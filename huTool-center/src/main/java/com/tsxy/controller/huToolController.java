@@ -20,7 +20,7 @@ public class huToolController {
     @GetMapping("/saveLog")
     public void saveLog(){
 
-        return huToolMapper.
+//        return huToolMapper.
 
     }
 
