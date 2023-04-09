@@ -18,30 +18,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>huTool-center</name>
     <description>huTool-center</description>
-    <properties>
-        <java.version>8</java.version>
-    </properties>
-    <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-jdbc</artifactId>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
-        <!-- mysql -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.22</version>
-        </dependency>
-        <!-- Druid -->
+    <dependencies>
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.16</version>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.67</version>
         </dependency>
 
         <dependency>
@@ -50,14 +32,6 @@
             <version>5.8.16</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus</artifactId>
-            <version>3.5.1</version>
-        </dependency>
-
     </dependencies>
-
-
 
 </project>

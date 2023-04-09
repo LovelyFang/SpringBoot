@@ -1,6 +1,7 @@
-package com.tsxy.mapper;
+package com.tsxy.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tsxy.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -8,5 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
  * @Date 2022/10/29 19:34
  */
 @Mapper
-public interface HuToolMapper extends BaseMapper<String> {
+public interface UserDao extends BaseMapper<User> {
+
+    User selectUserByIdNumber(String idNumber);
+
 }
