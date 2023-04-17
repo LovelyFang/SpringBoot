@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 海鹚的那套加密规则
  * @Author Liu_df
  * @Date 2023/3/30 11:05
  */
@@ -23,7 +24,7 @@ public class HCEncryptUtils {
 
     public static <K extends Comparable<K>> String getMD5Value(Map<K, ?> map, String key) {
         Map<String,Object> params  = JSON.parseObject(JSON.toJSONString(map), Map.class);
-        String strA = jionKeyAndValueWithSort(params, true);
+        String strA = joinKeyAndValueWithSort(params, true);
         String strTmp = strA + "&key=" + key;
         logger.debug("sign originStr :{}" ,strTmp);
         return getMd5(strTmp);
@@ -39,7 +40,7 @@ public class HCEncryptUtils {
         }
     }
 
-    public static <K extends Comparable<K>> String jionKeyAndValueWithSort(Map<K, ?> map, boolean removeBlank) {
+    public static <K extends Comparable<K>> String joinKeyAndValueWithSort(Map<K, ?> map, boolean removeBlank) {
         List<K> keyList = new ArrayList<>(map.keySet());
         Collections.sort(keyList);
         StringBuilder builder = new StringBuilder(1000);

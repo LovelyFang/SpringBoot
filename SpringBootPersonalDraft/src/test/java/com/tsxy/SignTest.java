@@ -2,12 +2,12 @@ package com.tsxy;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tsxy.utils.MD5EncryptUtils;
+import com.tsxy.utils.Md5Encrypt;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * @Author Liu_df
@@ -19,12 +19,25 @@ public class SignTest {
     @Test
     public void testSign(){
 
-        Map param = new HashMap();
-        param.put("sign", "");
-        param.put("users", "567,890");
-        param.put("user", "1234");
-        String pd123456 = MD5EncryptUtils.generateSign(param, "pd123456");
-        System.out.println(pd123456);
+//        Map param = new HashMap();
+//        param.put("sign", "");
+//        param.put("users", "567,890");
+//        param.put("user", "1234");
+//        String pd123456 = MD5EncryptUtils.generateSign(param, "pd123456");
+//        System.out.println(pd123456);
+
+
+
+        Map<String, String> param = new HashMap<>();
+        param.put("patHisNo", "2324534");
+        param.put("startIndex", "2");
+        param.put("numPerPage", "10");
+        Integer startIndex = MapUtils.getInteger(param, "startIndex", 0);
+        String patHisNo = MapUtils.getString(param, "patHisNo", "");
+        System.out.println(startIndex + "     " +  patHisNo);
+
+        System.out.println(Md5Encrypt.md5("hlw@36514526"));
+
     }
 
     @Test
