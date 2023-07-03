@@ -12,13 +12,27 @@
     <artifactId>server-huTool</artifactId>
     <packaging>war</packaging>
 
-    <name>server-huTool Maven Webapp</name>
+    <name>server-huTool</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 日志调用链 -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-sleuth-core</artifactId>
+                <version>2.0.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
 
     <dependencies>
 

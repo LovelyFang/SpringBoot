@@ -3,6 +3,7 @@ package com.tsxy;
 import com.alibaba.fastjson.JSONObject;
 import com.tsxy.utils.MD5EncryptUtils;
 import com.tsxy.utils.Md5Encrypt;
+import com.tsxy.utils.SecurityTool;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
@@ -14,6 +15,28 @@ import java.util.*;
  * @Date 2022/12/21 15:14
  */
 public class SignTest {
+
+    /**
+     * 商户后台手机加密算法
+     */
+    @Test
+    public void testHCSecurityTool() {
+        String ehis = null;
+        try {
+            ehis = SecurityTool.aes_encrypt("13789198919", "ehis");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(ehis);
+    }
+
+    /**
+     * 商户后台密码加密算法  密码 + `hc_oauth_center`.`t_oc_user` 表 id 字段
+     */
+    @Test
+    public void testHCMd5Encrypt() {
+        System.out.println(Md5Encrypt.md5("Yy@12345611111111111215"));
+    }
 
 
     @Test
