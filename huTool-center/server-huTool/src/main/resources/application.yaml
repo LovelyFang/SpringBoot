@@ -6,6 +6,8 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/tsxy?serverTimezone=UTC
     username: root
     password: 352202390
+  application:
+    name: HuTool-tsxy
 mybatis-plus:
 #  mapper-locations: classpath*:/mapper/**Mapper.xml
   global-config:
