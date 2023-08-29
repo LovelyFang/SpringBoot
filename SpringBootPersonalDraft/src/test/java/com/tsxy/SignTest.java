@@ -1,9 +1,8 @@
 package com.tsxy;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.tsxy.utils.MD5EncryptUtils;
-import com.tsxy.utils.Md5Encrypt;
-import com.tsxy.utils.SecurityTool;
+import com.tsxy.utils.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
@@ -24,10 +23,15 @@ public class SignTest {
         String ehis = null;
         try {
             ehis = SecurityTool.aes_encrypt("13789198919", "ehis");
+            String ehis1 = SecurityTool.aes_decrypt("27e709c6c03061ab5346116fb469653f", "ehis");
+            System.out.println("数据解密为===> " + ehis1);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         System.out.println(ehis);
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        System.out.println(JSON.toJSONString(stackTrace));
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     /**
@@ -87,6 +91,36 @@ public class SignTest {
         String sign = MD5EncryptUtils.generateSign(reqJSON, "53e13f8083bb0471fcb1be87ba8c8ff6");
         System.out.println(sign);
     }
+
+
+    @Test
+    public void testHCEncryptUtils() {
+        String hisRequestParamsXML = "<Request>\n" +
+                "    <serviceCode>SendMessageNotice</serviceCode>\n" +
+                "    <partnerId>GXRMYY</partnerId>\n" +
+                "    <timeStamp>2023-08-29 12:11:12</timeStamp>\n" +
+                "    <password>68B1FF180C387FDEEC49672E6A2C6939</password>\n" +
+                "    <cardNo>02722662</cardNo>\n" +
+                "    <msgType>6</msgType>\n" +
+                "    <msgContext>测试1</msgContext>\n" +
+                "    <channel></channel>\n" +
+                "    <msgUrl></msgUrl>\n" +
+                "</Request>";
+
+        JSONObject jsonObject = FangUtils.xml2JsonOther(hisRequestParamsXML);
+        Map params = JSONObject.parseObject(JSON.toJSONString(jsonObject), Map.class);
+
+//        Map<String, String> params = new HashMap<>();
+//        params.put("serviceCode", "SendMessageNotice");
+//        params.put("partnerId", "GXRMYY");
+//        params.put("timeStamp", "2023-08-29 12:11:12");
+//        params.put("cardNo", "02722662");
+//        params.put("msgType", "6");
+//        params.put("msgContext", "测试1");
+        String password = HCEncryptUtils.getMD5Value(params, "DF745D310612322B8ADF0D7A10246950");
+        System.out.println("海鹚加密算法得到的password = " + password);//60CDBB07272E31591678B1BD6C188B7A
+    }
+
 
 
 }

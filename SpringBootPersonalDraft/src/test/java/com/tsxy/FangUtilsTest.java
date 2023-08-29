@@ -108,7 +108,7 @@ public class FangUtilsTest {
             }
         }
          */
-        JSONObject jsonObject = FangUtils.xml2JsonOther(request);
+        JSONObject jsonObject = FangUtils.xml2JsonOther(request, "dat");
         System.out.println(jsonObject.toString());  // {"Response":{"resultCode":"-1","resultMessage":"生成作废发票记录失败,ORA-00001: 违反唯一约束条件"}}
     }
 

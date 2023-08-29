@@ -1,5 +1,6 @@
 package com.tsxy.job;
 
+import com.alibaba.fastjson.JSON;
 import com.tsxy.dao.CronMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class SqlJob implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
         scheduledTaskRegistrar.addTriggerTask(this::process,
                 triggerContext -> {
-                    String cron = cronMapper.getCron(1);
+                    String cron = "0/10 * * * * ?";
+//                    String cron = cronMapper.getCron(1);
                     if (cron.isEmpty()) {
                         logger.error("cron is null");
                     }
@@ -36,7 +38,9 @@ public class SqlJob implements SchedulingConfigurer {
     }
 
     private void process() {
-        logger.info("基于接口的定时任务");
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        logger.info(JSON.toJSON(stackTrace));
+//        logger.info("基于接口的定时任务");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.tsxy.utils;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.crypto.Cipher;
@@ -77,6 +78,21 @@ public class SecurityTool {
         }
 
         return false;
+    }
+
+    public static String removePatientIdNoSensitiveInfo(String idNo) throws Exception {
+
+        if (StringUtils.isBlank(idNo)) {
+            return "";
+        }
+        if (!checkIsNeedEncrypt(idNo, "ehis")){
+            try {
+                idNo = SecurityTool.aes_decrypt(idNo, "ehis");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return idNo.substring(0, 6).intern();
     }
 
 }

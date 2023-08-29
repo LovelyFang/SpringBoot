@@ -5,6 +5,7 @@ import com.gzhc365.component.security.api.SecurityFactory;
 import com.gzhc365.component.security.api.Sign;
 import com.gzhc365.component.security.api.SignType;
 import com.gzhc365.component.web.utils.HtmlUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,8 @@ public class HCEncryptUtils {
     public static <K extends Comparable<K>> String getMD5Value(Map<K, ?> map, String key) {
         Map<String,Object> params  = JSON.parseObject(JSON.toJSONString(map), Map.class);
         String strA = joinKeyAndValueWithSort(params, true);
-        String strTmp = strA + "&key=" + key;
+//        String strTmp = strA + "&key=" + key;
+        String strTmp = strA + "&" + key;
         logger.debug("sign originStr :{}" ,strTmp);
         return getMd5(strTmp);
     }
@@ -46,6 +48,9 @@ public class HCEncryptUtils {
         StringBuilder builder = new StringBuilder(1000);
         for (int i = 0; i < keyList.size(); i++) {
             K key = keyList.get(i);
+            if (StringUtils.equalsIgnoreCase(String.valueOf(key), "password")) {
+                continue;
+            }
             Object value = map.get(key);
             if (removeBlank && (null == value || "".equals(value))) {
                 continue;
