@@ -5,8 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.repository.init.ResourceReader;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class PropertyUtil {
@@ -23,12 +25,35 @@ public class PropertyUtil {
         props = new Properties();
         InputStream in = null;
         try {
-            String path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-            logger.info("读取配置文件路径==>{}", path + PROPERTY_FILE);
-            in = new FileInputStream(path + PROPERTY_FILE);
-            BufferedReader bf = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+//             方法一 getClassLoader 不用加 /
+//            in = ResourceReader.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);
+//            BufferedReader bf = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+//            props.load(bf);
+
+            // 方法二 class 要加 /
+//            in = ResourceReader.class.getResourceAsStream("/" + PROPERTY_FILE);
+//            BufferedReader bf = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+//            props.load(bf);
+
+            // 方法三 路径不能带转义字符
+//            String path = Thread.currentThread().getClass().getClassLoader().getResource("").getPath();
+            // 方法四
+            /*
+             *路径不能带转义字符
+             * 不带 / :
+             *  file:/D:/maven_repository/org/springframework/boot/spring-boot/2.7.5/spring-boot-2.7.5.jar!/org/springframework/boot/web/embedded/tomcat/common.properties
+             * 带 / :
+             *  /D:/IDEA Java Workspace/SpringBoot/SpringBootExampleTest/target/classes/common.properties
+             */
+            String path = Thread.currentThread().getContextClassLoader().getClass().getResource("/").getPath();
+            path = path + PROPERTY_FILE;
+            path = path.replace("%20", " ");
+            logger.info("读取配置文件路径==>{}", path);
+            in = new FileInputStream(path);
+            BufferedReader bf = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             props.load(bf);
-            // 方法二
+
+            // 方法五
 //            Resource resource = new ClassPathResource("common.properties");
 //            props.load(resource.getInputStream());
         } catch (FileNotFoundException e) {
