@@ -27,7 +27,8 @@ import java.util.concurrent.TimeUnit;
  * @Date 2022/11/15 0:08
  */
 
-@RestController
+@RestController()
+@RequestMapping("/health")
 public class HealthController extends BaseController implements InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(HealthController.class);
@@ -37,13 +38,18 @@ public class HealthController extends BaseController implements InitializingBean
 
     private ThreadPoolTaskExecutor executorService = null;
 
-    @RequestMapping("/health")
-    public String health() {
+    @RequestMapping("/index")
+    public String index() {
         return "hello world";
     }
 
     @RequestMapping("/getProperty/{key}")
-    public String getProperty(@PathVariable String key) {
+    public String getProperty(HttpServletRequest request, @PathVariable String key) {
+        String scheme = request.getScheme();
+        String serverName = request.getServerName();
+        int serverPort = request.getServerPort();
+        String hcUrl = scheme + "://" + serverName + ":" + serverPort;
+        System.out.println(hcUrl);
         String property = PropertyUtil.getProperty(key);
         return property;
     }

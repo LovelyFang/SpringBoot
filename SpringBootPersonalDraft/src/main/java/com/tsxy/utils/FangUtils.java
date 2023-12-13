@@ -3,15 +3,7 @@ package com.tsxy.utils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gzhc365.component.utils.common.DateTool;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import org.dom4j.Attribute;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -19,6 +11,14 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @Author Liu_df
@@ -250,6 +250,44 @@ public class FangUtils {
     }
 
 
+//------------------------------------------------------数学运算的---------------------------------------------------------------------------------------------------
+
+
+    public static int coverMathFen(String money) {
+        if (StringUtils.isBlank(money)) {
+            return 0;
+        }
+        BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(money));
+        return amount.multiply(BigDecimal.valueOf(100)).intValue();
+    }
+
+    private static final String x = "^[1-9]\\d*$";
+    //判断整数（int）
+    public static Boolean isInteger(String str) {
+        if (StringUtils.isBlank(str)) {
+            return false;
+        }
+        try {
+            Pattern pattern = Pattern.compile(x);
+            return pattern.matcher(str).matches();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Boolean isDouble(String str) {
+        if (StringUtils.isBlank(str)) {
+            return false;
+        }
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 

@@ -1,10 +1,8 @@
 package com.tsxy.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.gzhc365.component.security.api.SecurityFactory;
 import com.gzhc365.component.security.api.Sign;
 import com.gzhc365.component.security.api.SignType;
-import com.gzhc365.component.web.utils.HtmlUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +21,10 @@ public class HCEncryptUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(HCEncryptUtils.class);
 
-    public static <K extends Comparable<K>> String getMD5Value(Map<K, ?> map, String key) {
-        Map<String,Object> params  = JSON.parseObject(JSON.toJSONString(map), Map.class);
-        String strA = joinKeyAndValueWithSort(params, true);
+    public static <K extends Comparable<K>> String getMD5Value(Map<K, ?> map, String partnerSecret) {
+        String strA = joinKeyAndValueWithSort(map, true);
 //        String strTmp = strA + "&key=" + key;
-        String strTmp = strA + "&" + key;
+        String strTmp = strA + "&" + partnerSecret;
         logger.debug("sign originStr :{}" ,strTmp);
         return getMd5(strTmp);
     }

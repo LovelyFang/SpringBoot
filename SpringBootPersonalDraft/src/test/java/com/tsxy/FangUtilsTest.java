@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gzhc365.component.utils.common.DateTool;
 import com.tsxy.entity.BaseMpVo;
+import com.tsxy.methods.CompletableFutureMethod;
 import com.tsxy.utils.FangUtils;
+import com.tsxy.utils.FunctionMethodUtils;
 import com.tsxy.utils.medical.MedicalInsuranceUtils;
 import com.tsxy.utils.medical.RefreshTestZhyyEnvYbAccessTokenUtil;
 import com.tsxy.utils.medical.StringUtil;
@@ -22,7 +24,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -189,6 +193,86 @@ public class FangUtilsTest {
 
     }
 
+
+    @Test
+    public void testCustomFunctionMethod() {
+        CompletableFutureMethod me = new CompletableFutureMethod();
+        FunctionMethodUtils functionMethodUtils = new FunctionMethodUtils();
+        long startTime = System.nanoTime();
+        List<String> result = new ArrayList<>();
+        List<String> getInspectList1 = null;
+        try {
+            getInspectList1 = me.GetInspectList1();
+        } catch (Exception e) {
+            System.out.println("抓到异常! 不抛出");
+        }
+        me.obtainResult(result, getInspectList1);
+        List<String> getInspectList2 = me.GetInspectList2();
+        me.obtainResult(result, getInspectList2);
+        long endTime = System.nanoTime();
+        System.out.printf("运行结束耗时:%s 微秒", (endTime - startTime)/1000000);
+        System.out.println();
+        System.out.println("----结果: " + result);
+
+        result.clear();
+        startTime = System.nanoTime();
+        CompletableFuture<Void> future1 = CompletableFuture.runAsync(() -> {
+            try {
+                List<String> getInspectList11 = me.GetInspectList1();
+                me.obtainResult(result, getInspectList11);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        CompletableFuture<Void> future2 = CompletableFuture.runAsync(() -> {
+            List<String> getInspectList22 = me.GetInspectList2();
+            me.obtainResult(result, getInspectList22);
+        });
+        try {
+            future1.get();
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("捕获异常");
+        }
+        future2.join();
+
+        endTime = System.nanoTime();
+        System.out.printf("运行结束耗时:%s 微秒", (endTime - startTime)/1000000);
+        System.out.println();
+        System.out.println("结果: " + result);
+
+
+
+        result.clear();
+        startTime = System.nanoTime();
+
+        for (int i = 0; i < 10000; i++) {
+            if (i%2==0) {
+                functionMethodUtils.executorInspect(me::GetInspectList1, me::obtainResult, result);
+            }else {
+                functionMethodUtils.executorInspect(me::GetInspectList2, me::obtainResult, result);
+            }
+        }
+//        Future<?> future111 = executorInspect(me::GetInspectList1, me::obtainResult, result);
+//        Future<?> future222 = executorInspect(me::GetInspectList2, me::obtainResult, result);
+//        try {
+//            future111.get(2, TimeUnit.SECONDS);
+//            future222.get(2, TimeUnit.SECONDS);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+
+        endTime = System.nanoTime();
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.printf("===================运行结束耗时:%s 微秒", (endTime - startTime)/1000000);
+        System.out.println();
+        System.out.println("结果: " + JSON.toJSONString(result));
+
+    }
 
 
 }

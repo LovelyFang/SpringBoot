@@ -3,13 +3,13 @@ package com.tsxy;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tsxy.utils.*;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Map;
 
 /**
+ * 海鹚加密相关测试类
  * @Author Liu_df
  * @Date 2022/12/21 15:14
  */
@@ -40,28 +40,6 @@ public class SignTest {
     @Test
     public void testHCMd5Encrypt() {
         System.out.println(Md5Encrypt.md5("Yy@12345611111111111215"));
-    }
-
-
-    @Test
-    public void testSign(){
-
-//        Map param = new HashMap();
-//        param.put("sign", "");
-//        param.put("users", "567,890");
-//        param.put("user", "1234");
-//        String pd123456 = MD5EncryptUtils.generateSign(param, "pd123456");
-//        System.out.println(pd123456);
-
-
-
-        Map<String, String> param = new HashMap<>();
-        param.put("patHisNo", "2324534");
-        param.put("startIndex", "2");
-        param.put("numPerPage", "10");
-        Integer startIndex = MapUtils.getInteger(param, "startIndex", 0);
-        String patHisNo = MapUtils.getString(param, "patHisNo", "");
-        System.out.println(startIndex + "     " +  patHisNo);
 
         System.out.println(Md5Encrypt.md5("hlw@36514526"));
 
@@ -93,6 +71,9 @@ public class SignTest {
     }
 
 
+    /**
+     * 海鹚接口加密看这里
+     */
     @Test
     public void testHCEncryptUtils() {
         String hisRequestParamsXML = "<Request>\n" +
@@ -109,18 +90,27 @@ public class SignTest {
 
         JSONObject jsonObject = FangUtils.xml2JsonOther(hisRequestParamsXML);
         Map params = JSONObject.parseObject(JSON.toJSONString(jsonObject), Map.class);
-
-//        Map<String, String> params = new HashMap<>();
-//        params.put("serviceCode", "SendMessageNotice");
-//        params.put("partnerId", "GXRMYY");
-//        params.put("timeStamp", "2023-08-29 12:11:12");
-//        params.put("cardNo", "02722662");
-//        params.put("msgType", "6");
-//        params.put("msgContext", "测试1");
-        String password = HCEncryptUtils.getMD5Value(params, "DF745D310612322B8ADF0D7A10246950");
+        String password = HCEncryptUtils.getMD5Value(params, "CDSDQRMYY2698");
         System.out.println("海鹚加密算法得到的password = " + password);//60CDBB07272E31591678B1BD6C188B7A
     }
 
+    @Test
+    public void testHCMoneyCovert() {
 
+        String price = "525.51";
+
+        System.out.println(FangUtils.coverMathFen(price));
+
+        System.out.println(FangUtils.isDouble(price));
+        System.out.println(FangUtils.isDouble("233"));
+
+        System.out.println();
+        System.out.println();
+
+
+        String name = StringUtils.right(price, 1);
+        System.out.println("name  " + name);
+        System.out.println(StringUtils.leftPad(name, StringUtils.length(price), "*"));
+    }
 
 }
