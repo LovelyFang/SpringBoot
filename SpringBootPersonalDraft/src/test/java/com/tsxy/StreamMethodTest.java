@@ -79,6 +79,7 @@ public class StreamMethodTest {
         p3.setReqDateTime("2022-12-12 01:22:32");
         list.add(p3);
         List<entity.PatientRequisitionVo> sortList = list.stream().sorted(Comparator.comparing(entity.PatientRequisitionVo::getReqDateTime)).collect(Collectors.toList());
+        sortList.stream().peek(item -> item.setAge("2")).collect(Collectors.toList());
         System.out.println(JSON.toJSONString(sortList));
 
         // 看看这个时间是多少

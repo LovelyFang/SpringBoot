@@ -41,79 +41,9 @@ public class FangUtilsTest {
     @Test
     public void testXml2JSON() throws IOException, JDOMException {
 
-        String request = "<Response>" +
-                "<data>" +
-                "<dat>" +
-                "<AEpisodeID>2100021</AEpisodeID>" +
-                "<InstanceID>1843554||1^382</InstanceID>" +
-                "<admDate>2022-12-07</admDate>" +
-                "<admDoc>彭波</admDoc>" +
-                "<admloc>感染性疾病科门诊</admloc>" +
-                "<code>1</code>" +
-                "<docID>382</docID>" +
-                "<message>查询成功</message>" +
-                "</dat>" +
-                "<dat>" +
-                "<AEpisodeID>2117431</AEpisodeID>" +
-                "<InstanceID>1852408||1^382</InstanceID>" +
-                "<admDate>2022-12-09</admDate>" +
-                "<admDoc>温伶俐</admDoc>" +
-                "<admloc>全科医学科门诊</admloc>" +
-                "<code>1</code>" +
-                "<docID>382</docID>" +
-                "<message>查询成功</message>" +
-                "</dat>" +
-                "</data>" +
-                "</Response>";
-        /*
-        {
-            "Response": {
-                "data": [{
-                        "dat": [{
-                                "code": "1",
-                                "InstanceID": "1843554||1^382",
-                                "docID": "382",
-                                "AEpisodeID": "2100021",
-                                "admDoc": "彭波",
-                                "admDate": "2022-12-07",
-                                "admloc": "感染性疾病科门诊",
-                                "message": "查询成功"
-                            }, {
-                                "code": "1",
-                                "InstanceID": "1852408||1^382",
-                                "docID": "382",
-                                "AEpisodeID": "2117431",
-                                "admDoc": "温伶俐",
-                                "admDate": "2022-12-09",
-                                "admloc": "全科医学科门诊",
-                                "message": "查询成功"
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-        {
-            "Response": {
-                "data": [{
-                        "dat": [{
-                                "code": "1",
-                                "InstanceID": "1843554||1^382",
-                                "docID": "382",
-                                "AEpisodeID": "2100021",
-                                "admDoc": "彭波",
-                                "admDate": "2022-12-07",
-                                "admloc": "感染性疾病科门诊",
-                                "message": "查询成功"
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-         */
-        JSONObject jsonObject = FangUtils.xml2JsonOther(request, "dat");
-        System.out.println(jsonObject.toString());  // {"Response":{"resultCode":"-1","resultMessage":"生成作废发票记录失败,ORA-00001: 违反唯一约束条件"}}
+        String request = "<Response><data><dat><id>2100021</id><name>1843554||1^382</name><code>1</code><message><![CDATA[查询成功]]></message></dat></data></Response>";
+        JSONObject jsonObject = FangUtils.xml2Json(request, "dat");
+        System.out.println(jsonObject.toString());
     }
 
     /**
@@ -145,7 +75,8 @@ public class FangUtilsTest {
         responseResult = responseResult.replace("]]]]>","");
         responseResult = responseResult.replace("]]>","");
         responseResult = responseResult.replace("&", "&amp;");
-        JSONObject json = FangUtils.xml2Json(responseResult);
+        System.out.println(responseResult);
+        JSONObject json = FangUtils.xml2JsonOther(responseResult);
         System.out.println(json.toJSONString());
     }
 

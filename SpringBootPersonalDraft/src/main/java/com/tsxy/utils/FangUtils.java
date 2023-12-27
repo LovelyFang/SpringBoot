@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  */
 public class FangUtils {
 
-    public static JSONObject xml2Json(String xmlStr) throws IOException, JDOMException {
+    public static JSONObject xml2JsonOther(String xmlStr) throws IOException, JDOMException {
         if (StringUtils.isEmpty(xmlStr)) {
             return null;
         }
@@ -78,7 +78,15 @@ public class FangUtils {
         return obj;
     }
 
-    public static JSONObject xml2JsonOther(String xmlStr, String... arrParams) {
+    /**
+     * xml 转 JSON
+     * 注意: 根节点无了
+     * <Response><data><dat><id>2100021</id><name>1843554||1^382</name><code>1</code><message><![CDATA[查询成功]]></message></dat></data></Response>
+     * {"data":{"dat":[{"code":"1","name":"1843554||1^382","id":"2100021","message":"查询成功"}]}}
+     * @param xmlStr 带解析的xml字符串
+     * @param arrParams 可能是数组的元素
+     */
+    public static JSONObject xml2Json(String xmlStr, String... arrParams) {
         org.dom4j.Document doc;
         try {
             List<String> arrParamsList = Arrays.asList(arrParams);

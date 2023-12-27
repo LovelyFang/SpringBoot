@@ -88,7 +88,7 @@ public class SignTest {
                 "    <msgUrl></msgUrl>\n" +
                 "</Request>";
 
-        JSONObject jsonObject = FangUtils.xml2JsonOther(hisRequestParamsXML);
+        JSONObject jsonObject = FangUtils.xml2Json(hisRequestParamsXML);
         Map params = JSONObject.parseObject(JSON.toJSONString(jsonObject), Map.class);
         String password = HCEncryptUtils.getMD5Value(params, "CDSDQRMYY2698");
         System.out.println("海鹚加密算法得到的password = " + password);//60CDBB07272E31591678B1BD6C188B7A
