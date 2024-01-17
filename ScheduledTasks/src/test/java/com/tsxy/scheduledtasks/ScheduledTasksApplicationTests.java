@@ -12,6 +12,7 @@ class ScheduledTasksApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("Hello World!");
     }
 
 }
