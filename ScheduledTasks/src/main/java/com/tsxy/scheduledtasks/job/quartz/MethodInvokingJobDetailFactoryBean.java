@@ -22,7 +22,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.MethodInvoker;
 
-
 /**
  * @Author Liu_df
  * @Date 2022/11/22 0:35
@@ -45,58 +44,20 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
 
     private JobDetail jobDetail;
 
-    // private JdbcTemplate jdbcTemplate;
-
-    // private String tableName = "bbg_quartz_job_log";
-
     private ApplicationContext applicationContext;
 
-    /**
-     * Set the name of the job.
-     * <p>
-     * Default is the bean name of this FactoryBean.
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Set the group of the job.
-     * <p>
-     * Default is the default group of the Scheduler.
-     *
-     * @see org.quartz.Scheduler#DEFAULT_GROUP
-     */
     public void setGroup(String group) {
         this.group = group;
     }
 
-    /**
-     * Specify whether or not multiple jobs should be run in a concurrent
-     * fashion. The behavior when one does not want concurrent jobs to be
-     * executed is realized through adding the
-     * {@code @PersistJobDataAfterExecution} and
-     * {@code @DisallowConcurrentExecution} markers. More information on
-     * stateful versus stateless jobs can be found <a href=
-     * "http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/tutorial-lesson-03"
-     * > here</a>.
-     * <p>
-     * The default setting is to run jobs concurrently.
-     */
     public void setConcurrent(boolean concurrent) {
         this.concurrent = concurrent;
     }
 
-    /**
-     * Set the name of the target bean in the Spring BeanFactory.
-     * <p>
-     * This is an alternative to specifying {@link #setTargetObject
-     * "targetObject"}, allowing for non-singleton beans to be invoked. Note
-     * that specified "targetObject" and {@link #setTargetClass "targetClass"}
-     * values will override the corresponding effect of this "targetBeanName"
-     * setting (i.e. statically pre-define the bean type or even the bean
-     * object).
-     */
     public void setTargetBeanName(String targetBeanName) {
         this.targetBeanName = targetBeanName;
     }
@@ -116,14 +77,6 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
         this.beanFactory = beanFactory;
     }
 
-    /*
-     * public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-     * this.jdbcTemplate = jdbcTemplate; }
-     *
-     * public void setTableName(String tableName) { this.tableName = tableName;
-     * }
-     */
-
     @Override
     protected Class<?> resolveClassName(String className) throws ClassNotFoundException {
         return ClassUtils.forName(className, this.beanClassLoader);
@@ -133,21 +86,6 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void afterPropertiesSet() throws ClassNotFoundException, NoSuchMethodException {
         prepare();
-
-        /*
-         * if (jdbcTemplate == null) { String[] names =
-         * applicationContext.getBeanNamesForType(JdbcTemplate.class); if (names
-         * != null && names.length > 0) { jdbcTemplate =
-         * applicationContext.getBean(names[0], JdbcTemplate.class); } }
-         *
-         * if (jdbcTemplate == null) { String[] names =
-         * applicationContext.getBeanNamesForType(DataSource.class); if (names
-         * != null && names.length > 0) { DataSource dataSource =
-         * applicationContext.getBean(names[0], DataSource.class); jdbcTemplate
-         * = new JdbcTemplate(dataSource); } }
-         *
-         * Assert.notNull(jdbcTemplate, "jdbcTemplate must not be null");
-         */
 
         String name = (this.name != null ? this.name : this.beanName);
 
@@ -170,21 +108,9 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
         postProcessJobDetail(this.jobDetail);
     }
 
-    /**
-     * Callback for post-processing the JobDetail to be exposed by this
-     * FactoryBean.
-     * <p>
-     * The default implementation is empty. Can be overridden in subclasses.
-     *
-     * @param jobDetail the JobDetail prepared by this FactoryBean
-     */
     protected void postProcessJobDetail(JobDetail jobDetail) {
     }
 
-    /**
-     * Overridden to support the {@link #setTargetBeanName "targetBeanName"}
-     * feature.
-     */
     @Override
     public Class<?> getTargetClass() {
         Class<?> targetClass = super.getTargetClass();
@@ -195,10 +121,6 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
         return targetClass;
     }
 
-    /**
-     * Overridden to support the {@link #setTargetBeanName "targetBeanName"}
-     * feature.
-     */
     @Override
     public Object getTargetObject() {
         Object targetObject = super.getTargetObject();
@@ -224,10 +146,6 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
         return true;
     }
 
-    /**
-     * Quartz Job implementation that invokes a specified method. Automatically
-     * applied by MethodInvokingJobDetailFactoryBean.
-     */
     public static class MethodInvokingJob extends QuartzJobBean {
 
         protected static final Logger logger = LoggerFactory.getLogger(MethodInvokingJob.class);
@@ -239,50 +157,29 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
 
         private boolean concurrent;
 
-        /**
-         * Set the MethodInvoker to use.
-         */
         public void setMethodInvoker(MethodInvoker methodInvoker) {
             this.methodInvoker = methodInvoker;
         }
 
-        /*
-         * public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-         * this.jdbcTemplate = jdbcTemplate; }
-         *
-         * public void setTableName(String tableName) { this.tableName =
-         * tableName; }
-         */
 
         public void setConcurrent(boolean concurrent) {
             this.concurrent = concurrent;
         }
 
-        /**
-         * Invoke the method via the MethodInvoker.
-         */
         @Override
         protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-            // QuartzJobPersistence persistence = new
-            // QuartzJobPersistence(jdbcTemplate);
-            // Long id = persistence.createJob(context, tableName, concurrent);
-
-            // JobStatus status = JobStatus.FAILED;
             JobKey key = context.getJobDetail().getKey();
             try {
                 if (AppConfig.getInt("skip.all", 0) > 0) {
                     logger.info("skip.all > 0, 跳过定时任务:" + key.getGroup().toLowerCase() + "-" + key.getName());
-                    // status = JobStatus.SKIP_ALL;
                     return;
                 }
                 if (AppConfig.getInt("run." + key.getGroup().toLowerCase() + "." + key.getName(), 1) <= 0) {
                     logger.info("run." + key.getGroup().toLowerCase() + "." + key.getName() + " <= 0,跳过定时任务:"
                             + key.getGroup().toLowerCase() + "-" + key.getName());
-                    // status = JobStatus.SKIP;
                     return;
                 }
                 context.setResult(this.methodInvoker.invoke());
-                // status = JobStatus.SUCCESSED;
             } catch (InvocationTargetException ex) {
                 if (ex.getTargetException() instanceof JobExecutionException) {
                     throw (JobExecutionException) ex.getTargetException();
@@ -297,11 +194,6 @@ public class MethodInvokingJobDetailFactoryBean extends ArgumentConvertingMethod
         }
     }
 
-    /**
-     * Extension of the MethodInvokingJob, implementing the StatefulJob
-     * interface. Quartz checks whether or not jobs are stateful and if so,
-     * won't let jobs interfere with each other.
-     */
     @PersistJobDataAfterExecution
     @DisallowConcurrentExecution
     public static class StatefulMethodInvokingJob extends MethodInvokingJob {

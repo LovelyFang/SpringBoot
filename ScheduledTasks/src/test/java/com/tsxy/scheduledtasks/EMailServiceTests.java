@@ -9,6 +9,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
+import java.text.ParseException;
 
 /**
  * @Author Liu_df
@@ -59,7 +60,7 @@ public class EMailServiceTests {
 
 
     @Test
-    public void sendSimpleMailMessage() {
+    public void sendSimpleMailMessage() throws ParseException {
         EMailDTO mailDTO = new EMailDTO();
         mailDTO.setTo(TO);
 //        mailDTO.setCc(CC);

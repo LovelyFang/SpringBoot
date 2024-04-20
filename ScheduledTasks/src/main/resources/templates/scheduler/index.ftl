@@ -38,7 +38,11 @@
         </thead>
         <tbody>
         <#list triggers as item>
-          <tr>
+          <tr onmouseover="changeBgColor(this)" onmouseout="changeBgColor(this)"
+          	<#if item_index%2==0>
+            	style = "background-color: #2e93bd"
+            </#if>
+          >
             <td>${item_index}</td>
             <td>${item.triggerGroup!""}</td>
             <td>${item.triggerName!""}</td>
@@ -170,6 +174,15 @@
 					}
 				}
 			});
+		}
+		function changeBgColor(obj){
+			if((typeof obj.myBgColor)=="undefined"){
+				obj.myBgColor = obj.style.backgroundColor;
+				obj.style.backgroundColor = "#55c2be";
+			}else{
+				obj.style.backgroundColor = obj.myBgColor;
+				delete obj.myBgColor;
+			}
 		}
 	</script>
 	

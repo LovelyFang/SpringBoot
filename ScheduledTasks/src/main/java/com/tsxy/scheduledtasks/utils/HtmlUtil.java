@@ -1,14 +1,8 @@
-/**
- * 
- */
 package com.tsxy.scheduledtasks.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.gzhc365.component.utils.entity.HcContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,12 +14,10 @@ import java.io.PrintWriter;
 public class HtmlUtil {
     private static final Logger logger = LoggerFactory.getLogger(HtmlUtil.class);
 
-	public final static String ATTR_JSON_OBJECT = "com.gzhc365.web.json.obj";
-
-	public static void writerJson(HttpServletResponse response, Object object,HcContext hcContext) {
+	public static void writerJson(HttpServletResponse response, Object object) {
 		response.setContentType("application/json");
 		String json = JSON.toJSONString(object);
-		LoggerUtil.getLogger(hcContext,logger).info("HcContext:{},Response:{}",JSONObject.toJSONString(hcContext),json);
+		logger.info("Response:{}", json);
 		writer(response, json);
 	}
 

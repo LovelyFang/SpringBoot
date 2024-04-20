@@ -36,7 +36,6 @@ public class BaseController {
 
     /**
      * 提示失败信息
-     *
      */
     public void sendFailureMessage(HttpServletRequest request, HttpServletResponse response,
                                    int code, String message) {

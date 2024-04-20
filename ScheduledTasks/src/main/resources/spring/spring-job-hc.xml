@@ -3,33 +3,33 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<!--    &lt;!&ndash; 定时删除PDF文件 &ndash;&gt;-->
-<!--    <bean id="testSyncJob" class="com.tsxy.scheduledtasks.job.Cron4XML" />-->
+    <bean id="testSyncJob" class="com.tsxy.scheduledtasks.job.Cron4XML"/>
 
-<!--    <bean id="testSyncDetail"-->
-<!--          class="com.gzhc365.component.quartz.job.MethodInvokingJobDetailFactoryBean">-->
-<!--        <property name="targetObject" ref="testSyncJob" />-->
-<!--        <property name="targetMethod" value="syncJob" />-->
-<!--        <property name="concurrent" value="false" />-->
-<!--    </bean>-->
-<!--    <bean id="testSyncTrigger"-->
-<!--          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
-<!--        <property name="jobDetail" ref="testSyncDetail" />-->
-<!--        <property name="startDelay" value="100" />-->
-<!--        <property name="cronExpression" value="0 0 3 * * ?" />-->
-<!--        <property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_SMART_POLICY" />-->
-<!--        <property name="name" value="testSync" />-->
-<!--        <property name="group" value="register" />-->
-<!--    </bean>-->
+    <bean id="testSyncDetail"
+          class="com.gzhc365.component.quartz.job.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="testSyncJob" />
+        <property name="targetMethod" value="configurationTasks" />
+        <property name="concurrent" value="false" />
+    </bean>
 
-<!--    <bean id="schedulerFactory"-->
-<!--          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
-<!--        <property name="triggers">-->
-<!--            <list>-->
-<!--                <ref bean="testSyncTrigger" />-->
-<!--            </list>-->
-<!--        </property>-->
-<!--        <property name="autoStartup" value="true" />-->
-<!--    </bean>-->
+    <!--Cron表达式触发器-->
+    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="testSyncDetail" />
+        <property name="startDelay" value="100" />
+        <property name="cronExpression" value="0 0/2 * * * ?" />
+        <property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_SMART_POLICY" />
+        <property name="name" value="testSync" />
+        <property name="group" value="register" />
+    </bean>
+
+    <!--配置调度工厂-->
+    <bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger" />
+            </list>
+        </property>
+        <property name="autoStartup" value="true" />
+    </bean>
 
 </beans>

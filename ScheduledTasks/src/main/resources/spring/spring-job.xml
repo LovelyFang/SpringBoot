@@ -3,19 +3,33 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="testSyncJob" class="com.tsxy.scheduledtasks.job.Cron4XML"/>
+<bean id="testSyncJob" class="com.tsxy.scheduledtasks.job.Cron4XML"/>
 
-<!--    <bean id="testSyncDetail" class="com.tsxy.scheduledtasks.job.quartz.MethodInvokingJobDetailFactoryBean">-->
-<!--        <property name="targetObject" ref="testSyncJob"/>-->
-<!--        <property name="targetMethod" value="configurationTasks"/>-->
-<!--        <property name="concurrent" value="true"/>-->
-<!--    </bean>-->
-    <bean id="testSyncDetail"
-          class="com.gzhc365.component.quartz.job.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="testSyncJob" />
-        <property name="targetMethod" value="configurationTasks" />
-        <property name="concurrent" value="false" />
+    <bean id="testSyncDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="testSyncJob"/>
+        <property name="targetMethod" value="configurationTasks"/>
+        <property name="concurrent" value="true"/>
     </bean>
+
+    <!--Cron表达式触发器-->
+    <bean id="testSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="testSyncDetail" />
+        <property name="startDelay" value="100" />
+        <property name="cronExpression" value="0 0/2 * * * ?" />
+        <property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_SMART_POLICY" />
+        <property name="name" value="testSync" />
+        <property name="group" value="register" />
+    </bean>
+
+    <bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="testSyncTrigger" />
+            </list>
+        </property>
+        <property name="autoStartup" value="true" />
+    </bean>
+
 <!--    <bean name="secondCron" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">-->
 <!--        <property name="jobClass" value="com.tsxy.scheduledtasks.job.Cron4XML" />-->
 <!--        <property name="jobDataAsMap">-->
@@ -33,32 +47,14 @@
          <property name="repeatInterval" value="2000"/>
      </bean>
     -->
-    <!--Cron表达式触发器-->
-    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="testSyncDetail" />
-        <property name="startDelay" value="100" />
-        <property name="cronExpression" value="0 0/2 * * * ?" />
-        <property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_SMART_POLICY" />
-        <property name="name" value="testSync" />
-        <property name="group" value="register" />
-    </bean>
 
-    <!--配置调度工厂-->
-    <bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="triggers">
-            <list>
-                <ref bean="cronTrigger" />
-            </list>
-        </property>
-        <property name="autoStartup" value="true" />
-    </bean>
     <!--
-    1).org.springframework.scheduling.quartz.JobDetailBean有两个属性.
+    1).org.springframework.scheduling.quartz.JobDetailBean 有两个属性.
 　　　　jobClass属性即我们在java代码中定义的任务类.
 　　　　jobDataAsMap属性即该任务类中需要注入的属性值.
     2).Quartz的作业触发器有两种(两种任选其一就行)
 　　　　org.springframework.scheduling.quartz.SimpleTriggerFactoryBean:只支持按照一定频度调用任务，如每隔30分钟运行一次.
 　　　　org.springframework.scheduling.quartz.CronTriggerFactoryBean:支持到指定时间运行一次，如每天12:00运行一次等.
-    3).org.springframework.scheduling.quartz.SchedulerFactoryBean的参数triggers指定的就是之前配置的触发器的名字.
+    3).org.springframework.scheduling.quartz.SchedulerFactoryBean:的参数triggers指定的就是之前配置的触发器的名字.
     -->
 </beans>

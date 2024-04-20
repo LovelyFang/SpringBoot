@@ -1,12 +1,20 @@
 package com.tsxy.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.tsxy.service.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 /**
  * @Author Liu_df
@@ -16,6 +24,9 @@ import java.net.URL;
 @RestController
 @RequestMapping("/file")
 public class FileUpload {
+
+    @Resource
+    private FileService fileService;
 
     @GetMapping("/downloadFile")
     public void updateUploadStatus() throws IOException {
@@ -45,5 +56,39 @@ public class FileUpload {
             out.close();
             bos.close();
         }
+    }
+
+    @RequestMapping("/generateMedicalRecordPdfFile")
+    public void generateMedicalRecordPdfFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> params = this.getJSON(request);
+        fileService.generateMedicalRecordPdfFile(params, response);
+    }
+
+    public Map<String, Object> getJSON(HttpServletRequest request) throws Exception {
+        BufferedReader streamReader = new BufferedReader( new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder responseStrBuilder = new StringBuilder();
+        String inputStr;
+        while ((inputStr = streamReader.readLine()) != null) {
+            responseStrBuilder.append(inputStr);
+        }
+        return JSONObject.parseObject(responseStrBuilder.toString(), Map.class);
+    }
+
+    @GetMapping("/generatePDFFile/{fileName}")
+    public void generatePDFFile(@PathVariable String fileName, HttpServletRequest request, HttpServletResponse response) {
+
+        response.setContentType("application/pdf;charset=UTF-8");
+        response.setCharacterEncoding("utf-8");
+        try {
+            fileName = URLEncoder.encode(fileName, "UTF-8");
+            response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".pdf");
+            fileService.generatePDFFile(response);
+
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
     }
 }
