@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tsxy.dao.UserDao">
+
+    <resultMap id="BaseResultMap" type="com.tsxy.dto.User">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="unionId" column="union_id" jdbcType="VARCHAR"/>
+        <result property="idType" column="id_type" jdbcType="INTEGER"/>
+        <result property="idNumber" column="id_number" jdbcType="VARCHAR"/>
+        <result property="idNumberCipher" column="id_number_cipher" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+        <result property="realNameCipher" column="real_name_cipher" jdbcType="VARCHAR"/>
+        <result property="headImage" column="head_image" jdbcType="VARCHAR"/>
+        <result property="birthday" column="birthday" jdbcType="DATE"/>
+        <result property="sex" column="sex" jdbcType="VARCHAR"/>
+        <result property="country" column="country" jdbcType="VARCHAR"/>
+        <result property="province" column="province" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="area" column="area" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="mobileCipher" column="mobile_cipher" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,union_id,id_type,
+        id_number,id_number_cipher,nick_name,
+        real_name,real_name_cipher,head_image,
+        birthday,sex,country,
+        province,city,area,
+        address,mobile,mobile_cipher,
+        email,create_time,update_time
+    </sql>
+    
+    <select id="selectUserByIdNumber" resultType="com.tsxy.dto.User">
+        select id, real_name as realName from t_user where id = #{id}
+    </select>
+
+</mapper>
