@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface CronMapper {
 
-    @Select("select cron from scheduled where cron_id = #{id}")
+    @Select("select cron from t_job where cron_id = #{id}")
     String getCron(int id);
 
 }
