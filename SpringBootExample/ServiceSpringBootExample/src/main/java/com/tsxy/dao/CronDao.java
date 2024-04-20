@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Mapper
-public interface CronMapper {
+public interface CronDao {
 
     @Select("select cron from t_job where cron_id = #{id}")
     String getCron(int id);

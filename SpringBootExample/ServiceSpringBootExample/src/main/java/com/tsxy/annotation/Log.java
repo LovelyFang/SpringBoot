@@ -1,6 +1,7 @@
 package com.tsxy.annotation;
 
-import com.tsxy.constant.BusinessTypeEnum;
+import com.tsxy.constants.BusinessTypeEnum;
+
 import java.lang.annotation.*;
 
 /**

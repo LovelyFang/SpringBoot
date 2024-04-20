@@ -3,7 +3,6 @@ package com.tsxy.completablefuture.service.impl;
 import com.tsxy.completablefuture.entity.Quote;
 import com.tsxy.completablefuture.enums.CodeEnum;
 import com.tsxy.completablefuture.service.FutureMethod;
-import com.tsxy.completablefuture.utils.FutureUtil;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

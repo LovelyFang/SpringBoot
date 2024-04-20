@@ -1,4 +1,4 @@
-package com.tsxy.constant;
+package com.tsxy.constants;
 
 /**
  * @Author Liu_df

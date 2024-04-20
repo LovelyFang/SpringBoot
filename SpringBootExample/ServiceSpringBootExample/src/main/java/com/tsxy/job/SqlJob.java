@@ -1,7 +1,7 @@
 package com.tsxy.job;
 
 import com.alibaba.fastjson.JSON;
-import com.tsxy.dao.CronMapper;
+import com.tsxy.dao.CronDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class SqlJob implements SchedulingConfigurer {
     final Logger logger = LoggerFactory.getLogger(SqlJob.class);
 
     @Autowired
-    protected CronMapper cronMapper;
+    protected CronDao cronDao;
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {

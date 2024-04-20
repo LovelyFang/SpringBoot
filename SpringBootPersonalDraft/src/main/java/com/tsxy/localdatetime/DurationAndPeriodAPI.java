@@ -1,13 +1,9 @@
-package com.tsxy.java8time.localdatetime;
+package com.tsxy.localdatetime;
 
-import java.io.StringReader;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 /**

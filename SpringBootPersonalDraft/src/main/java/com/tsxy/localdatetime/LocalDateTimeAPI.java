@@ -1,8 +1,6 @@
-package com.tsxy.java8time.localdatetime;
+package com.tsxy.localdatetime;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.*;
 

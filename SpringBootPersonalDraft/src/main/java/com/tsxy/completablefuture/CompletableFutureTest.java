@@ -1,12 +1,8 @@
 package com.tsxy.completablefuture;
 
-import com.tsxy.completablefuture.entity.Shop;
 import com.tsxy.completablefuture.service.FutureMethod;
 import com.tsxy.completablefuture.service.impl.AsyncFutureMethod;
-import com.tsxy.completablefuture.service.impl.SyncFutureMethod;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
