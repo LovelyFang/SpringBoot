@@ -47,7 +47,7 @@ public class HealthController extends BaseController implements InitializingBean
         String serverName = request.getServerName();
         int serverPort = request.getServerPort();
         String hcUrl = scheme + "://" + serverName + ":" + serverPort;
-        System.out.println(hcUrl);
+        logger.info(hcUrl);
         String property = PropertyUtil.getProperty(key);
         return property;
     }
@@ -56,57 +56,57 @@ public class HealthController extends BaseController implements InitializingBean
     public String getCountDownLatch() throws Exception {
         CountDownLatch latch = new CountDownLatch(4);
         List<String> result = new ArrayList<>();
-        System.out.println(LocalTime.now() + "  开始执行");
+        logger.info(LocalTime.now() + "  开始执行");
         executorService.execute(() -> {
             try {
                 result.add("abc");
-                System.out.println(LocalTime.now() + " 增加abc");
+                logger.info(LocalTime.now() + " 增加abc");
             } catch (Exception e){
-                System.out.println("查询处方订单异常");
+                logger.info("查询处方订单异常");
             } finally {
                 latch.countDown();
             }
         });
-        System.out.println(LocalTime.now() + " ==> " + JSON.toJSONString(result));
+        logger.info(LocalTime.now() + " ==> " + JSON.toJSONString(result));
         executorService.execute(() -> {
             try {
                 TimeUnit.SECONDS.sleep(5);
                 result.add("123");
-                System.out.println(LocalTime.now() + " 增加123");
+                logger.info(LocalTime.now() + " 增加123");
             } catch (Exception e){
-                System.out.println("查询处方订单异常");
+                logger.info("查询处方订单异常");
             } finally {
                 latch.countDown();
             }
         });
-        System.out.println(LocalTime.now() + " ==> " + JSON.toJSONString(result));
+        logger.info(LocalTime.now() + " ==> " + JSON.toJSONString(result));
         executorService.execute(() -> {
             try {
                 TimeUnit.SECONDS.sleep(3);
                 result.add("abc123");
-                System.out.println(LocalTime.now() + " 增加abc123");
+                logger.info(LocalTime.now() + " 增加abc123");
             } catch (Exception e){
-                System.out.println("查询处方订单异常");
+                logger.info("查询处方订单异常");
             } finally {
                 latch.countDown();
             }
         });
         TimeUnit.SECONDS.sleep(1);
-        System.out.println(LocalTime.now() + " ==> " + JSON.toJSONString(result));
+        logger.info(LocalTime.now() + " ==> " + JSON.toJSONString(result));
         executorService.execute(() -> {
             try {
                 TimeUnit.SECONDS.sleep(1);
                 result.add("123abc");
-                System.out.println(LocalTime.now() + " 增加123abc");
+                logger.info(LocalTime.now() + " 增加123abc");
             } catch (Exception e){
-                System.out.println("查询处方订单异常");
+                logger.info("查询处方订单异常");
             } finally {
                 latch.countDown();
             }
         });
-        System.out.println(LocalTime.now() + " ==> " + JSON.toJSONString(result));
+        logger.info(LocalTime.now() + " ==> " + JSON.toJSONString(result));
         latch.await();
-        System.out.println(LocalTime.now() + "  处理完成");
+        logger.info(LocalTime.now() + "  处理完成");
         return JSON.toJSONString(result);
     }
 

@@ -2,6 +2,7 @@ package com.tsxy.job;
 
 import com.alibaba.fastjson.JSON;
 import com.tsxy.dao.CronDao;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class SqlJob implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
         scheduledTaskRegistrar.addTriggerTask(this::process,
                 triggerContext -> {
-                    String cron = "0/10 * * * * ?";
+                    String cron = "0/10 * 3-4 * * ?";
 //                    String cron = cronMapper.getCron(1);
-                    if (cron.isEmpty()) {
+                    if (StringUtils.isBlank(cron)) {
                         logger.error("cron is null");
                     }
                     return new CronTrigger(cron).nextExecutionTime(triggerContext);
