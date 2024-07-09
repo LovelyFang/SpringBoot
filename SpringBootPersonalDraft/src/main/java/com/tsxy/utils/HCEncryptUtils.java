@@ -7,10 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * 海鹚的那套加密规则
@@ -20,6 +19,33 @@ import java.util.Map;
 public class HCEncryptUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(HCEncryptUtils.class);
+
+    /**
+     * 这个才是正解
+     */
+    public static String getSign(Map<String, Object> map, String key) throws Exception {
+        List<String> list = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (null != entry.getValue() &&StringUtils.isNotBlank(entry.getValue()+"")) {
+                list.add(entry.getKey() + "=" + entry.getValue() + "&");
+            }
+        }
+        int size = list.size();
+        String[] arrayToSort = list.toArray(new String[size]);
+        Arrays.sort(arrayToSort, String.CASE_INSENSITIVE_ORDER);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            sb.append(arrayToSort[i]);
+        }
+        if (StringUtils.isNotBlank(key)) {
+            sb.append(key);
+        }
+        System.out.println("--------->" + sb);
+        String result = new String(sb.toString().getBytes(), StandardCharsets.UTF_8);
+        Sign sign = SecurityFactory.getSignInstance(SignType.MD5, null);
+        result  = sign.sign(result.getBytes()).toUpperCase();
+        return result;
+    }
 
     public static <K extends Comparable<K>> String getMD5Value(Map<K, ?> map, String partnerSecret) {
         String strA = joinKeyAndValueWithSort(map, true);
@@ -41,7 +67,7 @@ public class HCEncryptUtils {
 
     public static <K extends Comparable<K>> String joinKeyAndValueWithSort(Map<K, ?> map, boolean removeBlank) {
         List<K> keyList = new ArrayList<>(map.keySet());
-        Collections.sort(keyList);
+        Collections.sort(keyList);  // 此处用这个方法有bug
         StringBuilder builder = new StringBuilder(1000);
         for (int i = 0; i < keyList.size(); i++) {
             K key = keyList.get(i);
