@@ -67,8 +67,8 @@ public class FileServiceImpl implements FileService {
     public void generateMedicalRecordPdfFile(Map<String, Object> params, HttpServletResponse httpServletResponse) throws Exception {
 
         String patientName = MapUtils.getString(params, "patientName", "");
-        String startTime = MapUtils.getString(params, "startTime", "2022-10-10");
-        String endTime = MapUtils.getString(params, "endTime", "2022-11-01");
+        String startTime = MapUtils.getString(params, "startTime", "2024-04-01");
+        String endTime = MapUtils.getString(params, "endTime", "2024-05-01");
         String admissionNum = MapUtils.getString(params, "admissionNum", "");
         LocalDate startLocalDate = LocalDate.parse(startTime);
         LocalDate endLocalDate = LocalDate.parse(endTime);
@@ -610,10 +610,16 @@ public class FileServiceImpl implements FileService {
                     String imgFilePath = tmpDir + patientInfo + ".jpg";
                     Image image = Image.getInstance(imgFilePath);
 //                    image.setAbsolutePosition(100, 100);
-                    image.setRotationDegrees(90F);
-                    image.setScaleToFitHeight(true);
+//                    image.setScaleToFitHeight(true);
                     image.setScaleToFitLineWhenOverflow(true);
-//                    image.setRotation(180F);
+                    image.setAlignment(Image.ALIGN_CENTER);
+                    float imageWidth = image.getWidth();
+                    float imageHeight = image.getHeight();
+                    if (imageWidth > imageHeight) {
+                        image.setRotationDegrees(90F);
+                    }
+                    float scale = calculateScaleFactor(imageWidth, imageHeight, PageSize.A4.getWidth(), PageSize.A4.getHeight());
+                    image.scalePercent(scale);
                     document.newPage();
                     document.add(image);
                 }
@@ -627,6 +633,13 @@ public class FileServiceImpl implements FileService {
             if (writer != null)
                 writer.close();
         }
+    }
+    private static float calculateScaleFactor(float originalWidth, float originalHeight, float maxWidth, float maxHeight) {
+        float scale = 1f;
+        if (originalWidth > maxWidth || originalHeight > maxHeight) {
+            scale = Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
+        }
+        return scale * 100;
     }
 
     public void zipDirectory(String folderPath, HttpServletResponse response) {
@@ -659,7 +672,7 @@ public class FileServiceImpl implements FileService {
         }
     }
     private void addToZip(String filePath, File file, ZipOutputStream zipOut) throws IOException {
-        if (!file.isFile()) {
+        if (!file.isFile() || !file.getName().endsWith("pdf")) {
             return;
         }
         FileInputStream fis = new FileInputStream(file);
